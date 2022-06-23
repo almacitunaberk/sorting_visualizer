@@ -8,6 +8,10 @@
   color: white;
 }
 
+.header__form {
+  display: inline-block;
+}
+
 .header__input {
   border: none;
   outline: none;

@@ -21,7 +21,7 @@ const SortingVisualizer = () => {
       setViewportHeight(window.innerHeight);
     });
     resetArray();
-  }, [window.innerHeight]);
+  }, [window.innerHeight, arraySize]);
 
   const generateRandomNubmer = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -29,7 +29,12 @@ const SortingVisualizer = () => {
 
   return (
     <>
-      <Header handleArrayGenerate={() => resetArray()} handleBarNumberChange={(value) => setArraySize(value)} />
+      <Header
+        handleArrayGenerate={() => resetArray()}
+        handleBarNumberChange={(value) => {
+          setArraySize(value);
+        }}
+      />
       <div className="bar__container">
         {array.map((value, idx) => (
           <div className="array-bar" key={idx} style={{ height: `${value}px` }}></div>
