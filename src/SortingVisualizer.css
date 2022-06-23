@@ -1,12 +1,12 @@
 .bar__container {
   display: flex;
   justify-content: space-around;
-  align-items: start;
+  align-items: end;
+  position: relative;
 }
 
 .array-bar {
-  display: block;
-  margin-bottom: 2rem;
+  display: inline-block;
   width: 100%;
   margin-right: 2px;
   background: pink;
