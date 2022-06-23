@@ -1,0 +1,27 @@
+.header__array-generate-button {
+  cursor: pointer;
+  font-family: sans-serif;
+  font-weight: 300;
+  background: pink;
+  display: inline-block;
+  padding: 1rem 2rem;
+  color: white;
+}
+
+.header__input {
+  border: none;
+  outline: none;
+  background: pink;
+  color: white;
+  margin-left: 2rem;
+  padding: 1rem 2rem;
+}
+
+.header__input:focus::placeholder {
+  color: transparent;
+}
+
+.header__input::placeholder {
+  color: white;
+  transition: all 0.2s;
+}
