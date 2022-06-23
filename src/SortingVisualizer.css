@@ -1,13 +1,13 @@
 .bar__container {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: space-around;
+  align-items: start;
 }
 
 .array-bar {
-  display: inline-block;
-  margin-right: 2px;
+  display: block;
   margin-bottom: 2rem;
-  width: 3px;
+  width: 100%;
+  margin-right: 2px;
   background: pink;
 }
