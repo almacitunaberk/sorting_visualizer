@@ -1,3 +1,7 @@
+.header {
+  display: flex;
+  align-items: center;
+}
 .header__array-generate-button {
   cursor: pointer;
   font-family: sans-serif;
@@ -6,6 +10,7 @@
   display: inline-block;
   padding: 1rem 2rem;
   color: white;
+  margin-right: 2rem;
 }
 
 .header__form {
@@ -17,8 +22,8 @@
   outline: none;
   background: pink;
   color: white;
-  margin-left: 2rem;
   padding: 1rem 2rem;
+  margin-right: 2rem;
 }
 
 .header__input:focus::placeholder {
@@ -28,4 +33,14 @@
 .header__input::placeholder {
   color: white;
   transition: all 0.2s;
+}
+
+.header__button {
+  border: none;
+  outline: none;
+  background-color: pink;
+  color: white;
+  padding: 1rem 2rem;
+  margin-right: 2rem;
+  cursor: pointer;
 }

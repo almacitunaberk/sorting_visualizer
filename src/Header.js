@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import './Header.css';
 
-const Header = ({ handleArrayGenerate, handleBarNumberChange }) => {
+const Header = ({ handleArrayGenerate, handleBarNumberChange, handleMergeSort }) => {
   const [arraySize, setArraySize] = useState(0);
 
   const handleSubmit = (e) => {
@@ -12,7 +12,7 @@ const Header = ({ handleArrayGenerate, handleBarNumberChange }) => {
   return (
     <header className="header">
       <h3 className="header__array-generate-button" onClick={handleArrayGenerate}>
-        Generate Array
+        Generate New Array
       </h3>
       <form onSubmit={handleSubmit} className="header__form">
         <input
@@ -26,6 +26,9 @@ const Header = ({ handleArrayGenerate, handleBarNumberChange }) => {
           }}
         ></input>
       </form>
+      <button className="header__button" onClick={handleMergeSort}>
+        Merge Sort
+      </button>
     </header>
   );
 };

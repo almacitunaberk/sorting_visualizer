@@ -1,5 +1,6 @@
 import React, { useLayoutEffect } from 'react';
 import { useState, useEffect } from 'react';
+import { mergeSort, quickSort, heapSort, bubbleSort } from './sortingAlgorithms/sortingAlgorithms';
 import Header from './Header';
 import './SortingVisualizer.css';
 
@@ -27,6 +28,11 @@ const SortingVisualizer = () => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
+  const handleMergeSort = () => {
+    const sortedArray = mergeSort(array);
+    setArray(sortedArray);
+  };
+
   return (
     <>
       <Header
@@ -34,6 +40,7 @@ const SortingVisualizer = () => {
         handleBarNumberChange={(value) => {
           setArraySize(value);
         }}
+        handleMergeSort={() => handleMergeSort()}
       />
       <div className="bar__container">
         {array.map((value, idx) => (
