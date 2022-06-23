@@ -1,0 +1,11 @@
+.bar__container {
+  display: flex;
+}
+
+.array-bar {
+  display: inline-block;
+  margin-right: 2px;
+  margin-bottom: 2rem;
+  width: 0.8rem;
+  background: green;
+}
