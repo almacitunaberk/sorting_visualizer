@@ -8,7 +8,7 @@ export const mergeSort = (array) => {
 
 const mergeSortHelper = (array, startIndex, endIndex, tempArray, animations) => {
   if (startIndex === endIndex) return;
-  const middleIndex = Math.floor((endIndex + startIndex) / 2);
+  const middleIndex = Math.floor((startIndex + endIndex) / 2);
   mergeSortHelper(tempArray, startIndex, middleIndex, array, animations);
   mergeSortHelper(tempArray, middleIndex + 1, endIndex, array, animations);
   merge(array, startIndex, middleIndex, endIndex, tempArray, animations);
@@ -19,22 +19,19 @@ const merge = (array, startIndex, middleIndex, endIndex, tempArray, animations) 
   let i = startIndex;
   let j = middleIndex + 1;
   while (i <= middleIndex && j <= endIndex) {
-    const animation = {};
-    animation.comparison = [i, j];
+    animations.push([i, j]);
+    animations.push([i, j]);
     if (tempArray[i] <= tempArray[j]) {
-      animations.push([k, tempArray[i]]);
       animations.push([k, tempArray[i]]);
       array[k] = tempArray[i];
       k++;
       i++;
     } else {
       animations.push([k, tempArray[j]]);
-      animations.push([k, tempArray[j]]);
       array[k] = tempArray[j];
       k++;
       j++;
     }
-    animations.push(animation);
   }
   while (i <= middleIndex) {
     animations.push([i, i]);
@@ -55,15 +52,18 @@ const merge = (array, startIndex, middleIndex, endIndex, tempArray, animations) 
 };
 
 export const bubbleSort = (array) => {
-  const newArray = [...array];
+  const animations = [];
   for (let i = 0; i < array.length - 1; i++) {
     for (let j = 0; j < array.length - i - 1; j++) {
-      if (newArray[j] > newArray[j + 1]) {
-        swap(newArray, j, j + 1);
+      animations.push([i, j]);
+      animations.push([i, j]);
+      if (array[j] > array[j + 1]) {
+        swap(array, j, j + 1);
       }
     }
   }
-  return newArray;
+
+  return animations;
 };
 
 const swap = (array, index1, index2) => {
