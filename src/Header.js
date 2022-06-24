@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import './Header.css';
 
-const Header = ({ handleArrayGenerate, handleBarNumberChange, handleMergeSort }) => {
+const Header = ({ handleArrayGenerate, handleBarNumberChange, handleMergeSort, handleBubbleSort }) => {
   const [arraySize, setArraySize] = useState(0);
 
   const handleSubmit = (e) => {
@@ -28,6 +28,9 @@ const Header = ({ handleArrayGenerate, handleBarNumberChange, handleMergeSort })
       </form>
       <button className="header__button" onClick={handleMergeSort}>
         Merge Sort
+      </button>
+      <button className="header__button" onClick={handleBubbleSort}>
+        Bubble Sort
       </button>
     </header>
   );

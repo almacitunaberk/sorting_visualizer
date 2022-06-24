@@ -37,6 +37,11 @@ const SortingVisualizer = () => {
     setArray(sortedArray);
   };
 
+  const handleBubbleSort = () => {
+    const newArray = bubbleSort(array);
+    setArray(newArray);
+  };
+
   return (
     <div className="container">
       <Header
@@ -44,7 +49,8 @@ const SortingVisualizer = () => {
         handleBarNumberChange={(value) => {
           setArraySize(value);
         }}
-        handleMergeSort={() => handleMergeSort()}
+        handleMergeSort={handleMergeSort}
+        handleBubbleSort={handleBubbleSort}
       />
       <div className="bar__container">
         {array.map((value, idx) => (

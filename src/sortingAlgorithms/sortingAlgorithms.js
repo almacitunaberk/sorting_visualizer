@@ -33,8 +33,24 @@ const merge = (leftArray, rightArray) => {
   return finalArray;
 };
 
-export const bubbleSort = () => {};
+export const bubbleSort = (array) => {
+  const newArray = [...array];
+  for (let i = 0; i < array.length - 1; i++) {
+    for (let j = 0; j < array.length - i - 1; j++) {
+      if (newArray[j] > newArray[j + 1]) {
+        swap(newArray, j, j + 1);
+      }
+    }
+  }
+  return newArray;
+};
 
-export const heapSort = () => {};
+const swap = (array, index1, index2) => {
+  let temp = array[index1];
+  array[index1] = array[index2];
+  array[index2] = temp;
+};
+
+export const heapSort = (array) => {};
 
 export const quickSort = () => {};
