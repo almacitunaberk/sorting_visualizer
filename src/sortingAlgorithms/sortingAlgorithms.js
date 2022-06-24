@@ -1,36 +1,57 @@
 export const mergeSort = (array) => {
-  if (array.length === 1) return array;
-  const middleIndex = Math.floor(array.length / 2);
-  const leftHalf = array.slice(0, middleIndex);
-  const rightHalf = array.slice(middleIndex);
-  const sortedLeftHalf = mergeSort(leftHalf);
-  const sortedRightHalf = mergeSort(rightHalf);
-  const sortedArray = merge(sortedLeftHalf, sortedRightHalf);
-  return sortedArray;
+  const animations = [];
+  if (array.length <= 1) return array;
+  const tempArray = array.slice();
+  mergeSortHelper(array, 0, array.length - 1, tempArray, animations);
+  return animations;
 };
 
-const merge = (leftArray, rightArray) => {
-  const finalArray = [];
-  let i = 0;
-  let j = 0;
-  while (i < leftArray.length && j < rightArray.length) {
-    if (leftArray[i] <= rightArray[j]) {
-      finalArray.push(leftArray[i]);
+const mergeSortHelper = (array, startIndex, endIndex, tempArray, animations) => {
+  if (startIndex === endIndex) return;
+  const middleIndex = Math.floor((endIndex + startIndex) / 2);
+  mergeSortHelper(tempArray, startIndex, middleIndex, array, animations);
+  mergeSortHelper(tempArray, middleIndex + 1, endIndex, array, animations);
+  merge(array, startIndex, middleIndex, endIndex, tempArray, animations);
+};
+
+const merge = (array, startIndex, middleIndex, endIndex, tempArray, animations) => {
+  let k = startIndex;
+  let i = startIndex;
+  let j = middleIndex + 1;
+  while (i <= middleIndex && j <= endIndex) {
+    const animation = {};
+    animation.comparison = [i, j];
+    if (tempArray[i] <= tempArray[j]) {
+      animations.push([k, tempArray[i]]);
+      animations.push([k, tempArray[i]]);
+      array[k] = tempArray[i];
+      k++;
       i++;
     } else {
-      finalArray.push(rightArray[j]);
+      animations.push([k, tempArray[j]]);
+      animations.push([k, tempArray[j]]);
+      array[k] = tempArray[j];
+      k++;
       j++;
     }
+    animations.push(animation);
   }
-  while (i < leftArray.length) {
-    finalArray.push(leftArray[i]);
+  while (i <= middleIndex) {
+    animations.push([i, i]);
+    animations.push([i, i]);
+    animations.push([k, tempArray[i]]);
+    array[k] = tempArray[i];
+    k++;
     i++;
   }
-  while (j < rightArray.length) {
-    finalArray.push(rightArray[j]);
+  while (j <= endIndex) {
+    animations.push([j, j]);
+    animations.push([j, j]);
+    animations.push([k, tempArray[j]]);
+    array[k] = tempArray[j];
+    k++;
     j++;
   }
-  return finalArray;
 };
 
 export const bubbleSort = (array) => {

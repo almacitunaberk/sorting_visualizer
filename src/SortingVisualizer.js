@@ -13,7 +13,7 @@ const SortingVisualizer = () => {
     const newArray = [];
     let tempLargestVal = 0;
     for (let i = 0; i < arraySize; i++) {
-      const randomNumber = generateRandomNubmer(10, 1000);
+      const randomNumber = generateRandomNubmer(10, 299);
       newArray.push(randomNumber);
       if (randomNumber > tempLargestVal) {
         tempLargestVal = randomNumber;
@@ -33,8 +33,30 @@ const SortingVisualizer = () => {
   };
 
   const handleMergeSort = () => {
-    const sortedArray = mergeSort(array);
-    setArray(sortedArray);
+    const animations = mergeSort(array);
+    console.log(animations);
+    for (let i = 0; i < animations.length; i++) {
+      const bars = document.getElementsByClassName('array-bar');
+      const isColorChange = i % 3 !== 2;
+      if (isColorChange) {
+        const [barOneIdx, barTwoIdx] = animations[i];
+        console.log(barOneIdx);
+        console.log(barTwoIdx);
+        const barOneStyle = bars[barOneIdx].style;
+        const barTwoStyle = bars[barTwoIdx].style;
+        const color = i % 3 === 0 ? 'red' : 'purple';
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * 10);
+      } else {
+        setTimeout(() => {
+          const [barOneIdx, newHeight] = animations[i];
+          const barOneStyle = bars[barOneIdx].style;
+          barOneStyle.height = `${newHeight}px`;
+        }, i * 10);
+      }
+    }
   };
 
   const handleBubbleSort = () => {
