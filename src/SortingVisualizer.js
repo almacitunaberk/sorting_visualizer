@@ -38,7 +38,7 @@ const SortingVisualizer = () => {
   };
 
   return (
-    <>
+    <div className="container">
       <Header
         handleArrayGenerate={() => resetArray()}
         handleBarNumberChange={(value) => {
@@ -51,7 +51,7 @@ const SortingVisualizer = () => {
           <div className="array-bar" key={idx} style={{ height: `${(value / largestValue) * 100}%` }}></div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

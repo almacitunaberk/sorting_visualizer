@@ -1,6 +1,13 @@
+.container {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: max-content 1fr;
+  grid-row-gap: 1rem;
+}
+
 .bar__container {
-  height: 80vh;
-  margin-top: 1rem;
+  height: 95%;
+  padding: 1rem;
   display: flex;
   justify-content: space-around;
   align-items: end;
