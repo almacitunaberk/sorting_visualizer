@@ -103,22 +103,24 @@ const SortingVisualizer = () => {
     const animations = bubbleSort(array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
-      const isColorChange = i % 4 < 2;
-      if (isColorChange) {
+      const isComparison = i % 3 === 0;
+      if (isComparison) {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
-        const color = i % 3 === 0 ? 'red' : 'green';
-        setTimeout(() => {
-          barOneStyle.backgroundColor = color;
-          barTwoStyle.backgroundColor = color;
+        const firstTimer = new Timer(function () {
+          barOneStyle.backgroundColor = 'red';
+          barTwoStyle.backgroundColor = 'red';
         }, i * 10);
+        firstTimers.push(firstTimer);
       } else {
-        setTimeout(() => {
-          const [barOneIdx, newHeight] = animations[i];
-          const barOneStyle = arrayBars[barOneIdx].style;
-          barOneStyle.height = `${(newHeight / largestValue) * 100}%`;
+        const secondTimer = new Timer(function () {
+          const [barIdx, newHeight] = animations[i];
+          const barStyle = arrayBars[barIdx].style;
+          barStyle.height = `${(newHeight / largestValue) * 100}%`;
+          barStyle.backgroundColor = 'green';
         }, i * 10);
+        secondTimers.push(secondTimer);
       }
     }
   };
