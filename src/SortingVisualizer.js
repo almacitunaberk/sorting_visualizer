@@ -166,7 +166,7 @@ const SortingVisualizer = () => {
           const firstTimer = new Timer(function () {
             barOneStyle.backgroundColor = 'red';
             barTwoStyle.backgroundColor = 'red';
-          }, i * 100);
+          }, i * 10);
           firstTimers.push(firstTimer);
           break;
         case 'swap':
@@ -175,7 +175,7 @@ const SortingVisualizer = () => {
             const barStyle = arrayBars[barIdx].style;
             barStyle.height = `${(newHeight / largestValue) * 100}%`;
             barStyle.backgroundColor = 'green';
-          }, i * 100);
+          }, i * 10);
           firstTimers.push(_firstTimer);
           break;
         case 'final':
@@ -184,7 +184,7 @@ const SortingVisualizer = () => {
             const barStyle = arrayBars[barIdx].style;
             barStyle.height = `${(newHeight / largestValue) * 100}%`;
             barStyle.backgroundColor = 'green';
-          }, i * 100);
+          }, i * 10);
           secondTimers.push(secondTimer);
           break;
         case 'color_change':
@@ -194,7 +194,7 @@ const SortingVisualizer = () => {
             const barTwoStyle = arrayBars[barTwoIdx].style;
             barOneStyle.backgroundColor = 'green';
             barTwoStyle.backgroundColor = 'green';
-          }, i * 100);
+          }, i * 10);
           firstTimers.push(__firstTimer);
           break;
       }

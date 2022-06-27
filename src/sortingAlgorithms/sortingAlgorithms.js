@@ -121,4 +121,26 @@ export const insertionSort = (array) => {
 
 export const heapSort = (array) => {};
 
-export const quickSort = () => {};
+export const quickSort = (array, startIndex = 0, endIndex = array.length - 1, animations) => {
+  if (startIndex >= endIndex) return animations;
+  let index = quickSortHelper(array, startIndex, endIndex);
+  quickSort(array, startIndex, index - 1);
+  quickSort(array, index + 1, endIndex);
+};
+
+const quickSortHelper = (array, startIndex, endIndex, animations) => {
+  let pivot = array[startIndex];
+  let index = startIndex;
+  for (let i = startIndex + 1; i < endIndex; i++) {
+    if (pivot > array[i]) {
+      index++;
+      const temp = array[i];
+      array[i] = array[index];
+      array[index] = temp;
+    }
+  }
+  const temp = array[index];
+  array[index] = pivot;
+  array[startIndex] = temp;
+  return index;
+};
