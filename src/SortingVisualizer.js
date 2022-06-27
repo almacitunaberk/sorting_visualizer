@@ -36,7 +36,6 @@ const SortingVisualizer = () => {
 
   const generateNewArray = () => {
     window.location.reload(false);
-    resetArray();
   };
 
   useEffect(() => {
