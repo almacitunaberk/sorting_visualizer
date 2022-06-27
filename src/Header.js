@@ -8,6 +8,7 @@ const Header = ({
   handleMergeSort,
   handleBubbleSort,
   handleSelectionSort,
+  handleInsertionSort,
   handleStop,
   handleResume,
 }) => {
@@ -42,6 +43,9 @@ const Header = ({
       </button>
       <button className="header__button" onClick={handleSelectionSort}>
         Selection Sort
+      </button>
+      <button className="header__button" onClick={handleInsertionSort}>
+        Insertion Sort
       </button>
       <button className="header__button" onClick={handleStop}>
         Stop

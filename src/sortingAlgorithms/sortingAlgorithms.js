@@ -97,6 +97,28 @@ export const selectionSort = (array) => {
   return animations;
 };
 
+export const insertionSort = (array) => {
+  //console.log(array);
+  const animations = [];
+  for (let i = 1; i < array.length; i++) {
+    let index = i;
+    let value = array[i];
+    for (let j = i - 1; j >= 0; j--) {
+      animations.push(['comparison', i, j]);
+      if (array[j] > value) {
+        animations.push(['swap', j + 1, array[j]]);
+        index = j;
+        array[j + 1] = array[j];
+      } else {
+        animations.push(['color_change', i, j]);
+      }
+    }
+    animations.push(['final', index, value]);
+    array[index] = value;
+  }
+  return animations;
+};
+
 export const heapSort = (array) => {};
 
 export const quickSort = () => {};

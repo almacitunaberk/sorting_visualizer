@@ -1,6 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { mergeSort, quickSort, heapSort, bubbleSort, selectionSort } from './sortingAlgorithms/sortingAlgorithms';
+import {
+  mergeSort,
+  quickSort,
+  heapSort,
+  bubbleSort,
+  selectionSort,
+  insertionSort,
+} from './sortingAlgorithms/sortingAlgorithms';
 import Header from './Header';
 import './SortingVisualizer.css';
 
@@ -145,6 +152,55 @@ const SortingVisualizer = () => {
     }
   };
 
+  const handleInsertionSort = () => {
+    const animations = insertionSort(array);
+    // console.log(animations);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName('array-bar');
+      const [type, _, __] = animations[i];
+      switch (type) {
+        case 'comparison':
+          const [___, barOneIdx, barTwoIdx] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          const barTwoStyle = arrayBars[barTwoIdx].style;
+          const firstTimer = new Timer(function () {
+            barOneStyle.backgroundColor = 'red';
+            barTwoStyle.backgroundColor = 'red';
+          }, i * 100);
+          firstTimers.push(firstTimer);
+          break;
+        case 'swap':
+          const _firstTimer = new Timer(function () {
+            const [__, barIdx, newHeight] = animations[i];
+            const barStyle = arrayBars[barIdx].style;
+            barStyle.height = `${(newHeight / largestValue) * 100}%`;
+            barStyle.backgroundColor = 'green';
+          }, i * 100);
+          firstTimers.push(_firstTimer);
+          break;
+        case 'final':
+          const secondTimer = new Timer(function () {
+            const [__, barIdx, newHeight] = animations[i];
+            const barStyle = arrayBars[barIdx].style;
+            barStyle.height = `${(newHeight / largestValue) * 100}%`;
+            barStyle.backgroundColor = 'green';
+          }, i * 100);
+          secondTimers.push(secondTimer);
+          break;
+        case 'color_change':
+          const __firstTimer = new Timer(function () {
+            const [__, barOneIdx, barTwoIdx] = animations[i];
+            const barOneStyle = arrayBars[barOneIdx].style;
+            const barTwoStyle = arrayBars[barTwoIdx].style;
+            barOneStyle.backgroundColor = 'green';
+            barTwoStyle.backgroundColor = 'green';
+          }, i * 100);
+          firstTimers.push(__firstTimer);
+          break;
+      }
+    }
+  };
+
   const handleStop = () => {
     wait = true;
     firstTimers.forEach((timer) => {
@@ -181,6 +237,7 @@ const SortingVisualizer = () => {
         handleStop={handleStop}
         handleResume={handleResume}
         handleSelectionSort={handleSelectionSort}
+        handleInsertionSort={handleInsertionSort}
       />
       <div className="bar__container">
         {array.map((value, idx) => (
