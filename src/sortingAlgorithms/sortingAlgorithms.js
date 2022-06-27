@@ -76,6 +76,27 @@ const swap = (array, index1, index2) => {
   array[index2] = temp;
 };
 
+export const selectionSort = (array) => {
+  const animations = [];
+  for (let i = 0; i < array.length - 1; i++) {
+    let smallestIndex = i;
+    for (let j = i + 1; j < array.length; j++) {
+      animations.push([i, j]);
+      if (array[j] < array[smallestIndex]) {
+        let temp = array[smallestIndex];
+        animations.push([i, array[j]]);
+        animations.push([j, temp]);
+        array[i] = array[j];
+        array[j] = temp;
+      } else {
+        animations.push([i, array[i]]);
+        animations.push([j, array[j]]);
+      }
+    }
+  }
+  return animations;
+};
+
 export const heapSort = (array) => {};
 
 export const quickSort = () => {};

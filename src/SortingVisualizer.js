@@ -1,12 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import {
-  mergeSort,
-  quickSort,
-  heapSort,
-  bubbleSort,
-  getMergeSortAnimations,
-} from './sortingAlgorithms/sortingAlgorithms';
+import { mergeSort, quickSort, heapSort, bubbleSort, selectionSort } from './sortingAlgorithms/sortingAlgorithms';
 import Header from './Header';
 import './SortingVisualizer.css';
 
@@ -86,14 +80,14 @@ const SortingVisualizer = () => {
         const firstTimer = new Timer(function () {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * 10);
+        }, i * 100);
         firstTimers.push(firstTimer);
       } else {
         const secondTimer = new Timer(function () {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${(newHeight / largestValue) * 100}%`;
-        }, i * 10);
+        }, i * 100);
         secondTimers.push(secondTimer);
       }
     }
@@ -111,7 +105,7 @@ const SortingVisualizer = () => {
         const firstTimer = new Timer(function () {
           barOneStyle.backgroundColor = 'red';
           barTwoStyle.backgroundColor = 'red';
-        }, i * 10);
+        }, i * 100);
         firstTimers.push(firstTimer);
       } else {
         const secondTimer = new Timer(function () {
@@ -119,7 +113,33 @@ const SortingVisualizer = () => {
           const barStyle = arrayBars[barIdx].style;
           barStyle.height = `${(newHeight / largestValue) * 100}%`;
           barStyle.backgroundColor = 'green';
-        }, i * 10);
+        }, i * 100);
+        secondTimers.push(secondTimer);
+      }
+    }
+  };
+
+  const handleSelectionSort = () => {
+    const animations = selectionSort(array);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName('array-bar');
+      const isComparison = i % 3 === 0;
+      if (isComparison) {
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        const firstTimer = new Timer(function () {
+          barOneStyle.backgroundColor = 'red';
+          barTwoStyle.backgroundColor = 'red';
+        }, i * 100);
+        firstTimers.push(firstTimer);
+      } else {
+        const secondTimer = new Timer(function () {
+          const [barIdx, newHeight] = animations[i];
+          const barStyle = arrayBars[barIdx].style;
+          barStyle.height = `${(newHeight / largestValue) * 100}%`;
+          barStyle.backgroundColor = 'green';
+        }, i * 100);
         secondTimers.push(secondTimer);
       }
     }
@@ -160,6 +180,7 @@ const SortingVisualizer = () => {
         handleBubbleSort={handleBubbleSort}
         handleStop={handleStop}
         handleResume={handleResume}
+        handleSelectionSort={handleSelectionSort}
       />
       <div className="bar__container">
         {array.map((value, idx) => (

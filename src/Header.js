@@ -7,6 +7,7 @@ const Header = ({
   handleBarNumberChange,
   handleMergeSort,
   handleBubbleSort,
+  handleSelectionSort,
   handleStop,
   handleResume,
 }) => {
@@ -38,6 +39,9 @@ const Header = ({
       </button>
       <button className="header__button" onClick={handleBubbleSort}>
         Bubble Sort
+      </button>
+      <button className="header__button" onClick={handleSelectionSort}>
+        Selection Sort
       </button>
       <button className="header__button" onClick={handleStop}>
         Stop
