@@ -58,11 +58,13 @@ export const bubbleSort = (array) => {
       animations.push([i, j]);
       animations.push([i, j]);
       if (array[j] > array[j + 1]) {
+        let temp = array[j];
+        animations.push([j, array[j + 1]]);
+        animations.push([j + 1, temp]);
         swap(array, j, j + 1);
       }
     }
   }
-
   return animations;
 };
 

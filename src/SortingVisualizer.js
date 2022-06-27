@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import {
   mergeSort,
@@ -10,11 +10,38 @@ import {
 import Header from './Header';
 import './SortingVisualizer.css';
 
+var Timer = function (callback, delay) {
+  var timerId,
+    start,
+    remaining = delay;
+
+  this.pause = function () {
+    window.clearTimeout(timerId);
+    timerId = null;
+    remaining -= Date.now() - start;
+  };
+
+  this.resume = function () {
+    if (timerId) {
+      return;
+    }
+
+    start = Date.now();
+    timerId = window.setTimeout(callback, remaining);
+  };
+
+  this.resume();
+};
+
 const SortingVisualizer = () => {
   const _arraySize = window.localStorage.getItem('arraySize') ? window.localStorage.getItem('arraySize') : 300;
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(_arraySize);
   const [largestValue, setLargestValue] = useState(10);
+  let wait = false;
+
+  let firstTimers = [];
+  let secondTimers = [];
 
   const resetArray = () => {
     const newArray = [];
@@ -56,6 +83,32 @@ const SortingVisualizer = () => {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         const color = i % 3 === 0 ? 'red' : 'green';
+        const firstTimer = new Timer(function () {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * 10);
+        firstTimers.push(firstTimer);
+      } else {
+        const secondTimer = new Timer(function () {
+          const [barOneIdx, newHeight] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          barOneStyle.height = `${(newHeight / largestValue) * 100}%`;
+        }, i * 10);
+        secondTimers.push(secondTimer);
+      }
+    }
+  };
+
+  const handleBubbleSort = () => {
+    const animations = bubbleSort(array);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName('array-bar');
+      const isColorChange = i % 4 < 2;
+      if (isColorChange) {
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color = i % 3 === 0 ? 'red' : 'green';
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
@@ -70,8 +123,27 @@ const SortingVisualizer = () => {
     }
   };
 
-  const handleBubbleSort = () => {
-    const animations = bubbleSort(array);
+  const handleStop = () => {
+    wait = true;
+    firstTimers.forEach((timer) => {
+      timer.pause();
+    });
+    secondTimers.forEach((timer) => {
+      timer.pause();
+    });
+    wait = false;
+  };
+
+  const handleResume = () => {
+    if (wait) {
+      return;
+    }
+    firstTimers.forEach((timer) => {
+      timer.resume();
+    });
+    secondTimers.forEach((timer) => {
+      timer.resume();
+    });
   };
 
   return (
@@ -84,6 +156,8 @@ const SortingVisualizer = () => {
         }}
         handleMergeSort={handleMergeSort}
         handleBubbleSort={handleBubbleSort}
+        handleStop={handleStop}
+        handleResume={handleResume}
       />
       <div className="bar__container">
         {array.map((value, idx) => (
