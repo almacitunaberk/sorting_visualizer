@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeAlgo } from '../../redux/slices/selectedAlgo';
 
 const Dashboard = () => {
-  const toggle = useSelector((state) => state.toggleDashboard);
+  const _toggle = useSelector((state) => state.toggleDashboard);
+  const toggle = _toggle.toggle;
   const dispatch = useDispatch();
   const [selectedAlgo, setSelectedAlgo] = useState('merge');
 
@@ -32,7 +33,7 @@ const Dashboard = () => {
 
   return (
     <div className="container">
-      <div className={`navigation ${toggle.toggle && 'toggle'}`}>
+      <div className={`navigation ${toggle && 'toggle'}`}>
         <ul className="navigation__list">
           <li className="app__name">
             <a className="app__name-tag" href="#">
