@@ -1,12 +1,11 @@
-.container {
-  display: grid;
+.srt__visual__container {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
-  grid-template-rows: max-content 1fr;
-  grid-row-gap: 1rem;
 }
 
 .bar__container {
-  height: 95%;
+  height: 100%;
   padding: 1rem;
   display: flex;
   justify-content: space-around;
@@ -18,5 +17,6 @@
   display: inline-block;
   width: 100%;
   margin-right: 2px;
-  background: pink;
+  background: var(--blue);
+  border-radius: 100rem;
 }

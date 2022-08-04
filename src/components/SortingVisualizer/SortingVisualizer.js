@@ -1,5 +1,6 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import {
   mergeSort,
   quickSort,
@@ -9,7 +10,7 @@ import {
   insertionSort,
 } from '../../sortingAlgorithms/sortingAlgorithms';
 import Header from '../Header/Header';
-import './SortingVisualizer.module.css';
+import './SortingVisualizer.css';
 
 var Timer = function (callback, delay) {
   var timerId,
@@ -35,10 +36,12 @@ var Timer = function (callback, delay) {
 };
 
 const SortingVisualizer = () => {
+  const selectedAlgo = useSelector((state) => state.selectedAlgo);
   const _arraySize = window.localStorage.getItem('arraySize') ? window.localStorage.getItem('arraySize') : 300;
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(_arraySize);
   const [largestValue, setLargestValue] = useState(10);
+  let sortingStarted = useRef(false);
   let wait = false;
 
   let firstTimers = [];
@@ -56,14 +59,20 @@ const SortingVisualizer = () => {
     }
     const bars = document.getElementsByClassName('array-bar');
     for (let i = 0; i < bars.length; i++) {
-      bars[i].style.backgroundColor = 'pink';
+      bars[i].className = 'array-bar';
     }
     setArray(newArray);
     setLargestValue(tempLargestVal);
   };
 
   const generateNewArray = () => {
-    window.location.reload(false);
+    //window.location.reload(false);
+    if (sortingStarted) {
+      sortingStarted = false;
+      window.location.reload();
+    } else {
+      resetArray();
+    }
   };
 
   useEffect(() => {
@@ -72,6 +81,29 @@ const SortingVisualizer = () => {
 
   const generateRandomNubmer = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  const handleStart = () => {
+    sortingStarted = true;
+    console.log(selectedAlgo.algo);
+    switch (selectedAlgo.algo) {
+      case 'merge': {
+        handleMergeSort();
+        break;
+      }
+      case 'bubble': {
+        handleBubbleSort();
+        break;
+      }
+      case 'insertion': {
+        handleInsertionSort();
+        break;
+      }
+      case 'selection': {
+        handleSelectionSort();
+        break;
+      }
+    }
   };
 
   const handleMergeSort = () => {
@@ -224,20 +256,22 @@ const SortingVisualizer = () => {
     });
   };
 
+  const handleShuffle = () => {
+    generateNewArray();
+  };
+
   return (
-    <div className="container">
+    <div className="srt__visual__container">
       <Header
         handleArrayGenerate={generateNewArray}
         handleBarNumberChange={(value) => {
           window.localStorage.setItem('arraySize', value);
           setArraySize(value);
         }}
-        handleMergeSort={handleMergeSort}
-        handleBubbleSort={handleBubbleSort}
+        handleStart={handleStart}
         handleStop={handleStop}
         handleResume={handleResume}
-        handleSelectionSort={handleSelectionSort}
-        handleInsertionSort={handleInsertionSort}
+        handleShuffle={handleShuffle}
       />
       <div className="bar__container">
         {array.map((value, idx) => (

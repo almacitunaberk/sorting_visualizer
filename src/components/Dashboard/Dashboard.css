@@ -20,25 +20,28 @@
 }
 
 .algo__link {
+  position: relative;
   list-style: none;
   width: 100%;
   padding: 1rem;
   cursor: pointer;
 }
 
-.algo__link:hover {
+.algo__link:hover,
+.algo__link.clicked {
   position: relative;
   background: white;
   border-top-left-radius: 3rem;
   border-bottom-left-radius: 3rem;
 }
 
-.algo__link:hover .algo__link--tag {
+.algo__link:hover .algo__link--tag,
+.algo__link.clicked .algo__link--tag {
   color: var(--blue);
 }
 
 .algo__link:hover .algo__link--tag::before,
-.algo__link.cliked .algo__link--tag::before {
+.algo__link.clicked .algo__link--tag::before {
   content: '';
   position: absolute;
   right: 0;
@@ -51,7 +54,7 @@
 }
 
 .algo__link:hover .algo__link--tag::after,
-.algo__link.cliked .algo__link--tag::after {
+.algo__link.clicked .algo__link--tag::after {
   content: '';
   position: absolute;
   right: 0;

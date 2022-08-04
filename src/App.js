@@ -1,14 +1,18 @@
 import SortingVisualizer from './components/SortingVisualizer/SortingVisualizer';
 import Dashboard from './components/Dashboard/Dashboard';
 import './App.css';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 const App = () => {
   return (
-    <div className="app__container">
-      <Dashboard />
-      <div className="main">
-        <SortingVisualizer />
+    <Provider store={store}>
+      <div className="app__container">
+        <Dashboard />
+        <div className="main">
+          <SortingVisualizer />
+        </div>
       </div>
-    </div>
+    </Provider>
   );
 };
 

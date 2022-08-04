@@ -1,24 +1,26 @@
 import React from 'react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import './Header.css';
 import { ImStatsBars } from 'react-icons/im';
 
 const Header = ({
   handleArrayGenerate,
   handleBarNumberChange,
-  handleMergeSort,
-  handleBubbleSort,
-  handleSelectionSort,
-  handleInsertionSort,
+  handleStart,
   handleStop,
   handleResume,
+  handleShuffle,
 }) => {
+  const selectedAlgo = useSelector((state) => state.selectedAlgo);
+
   const [arraySize, setArraySize] = useState(0);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleBarNumberChange(arraySize);
   };
+
   return (
     <div className="header">
       <button className="generate__array__button" onClick={handleArrayGenerate}>
@@ -37,13 +39,16 @@ const Header = ({
         ></input>
         <ImStatsBars className="bar__selection__icon" />
       </form>
+      <button className="header__button" onClick={handleStart}>
+        Start
+      </button>
       <button className="header__button" onClick={handleStop}>
         Stop
       </button>
       <button className="header__button" onClick={handleResume}>
         Resume
       </button>
-      <button className="header__button" onClick={handleResume}>
+      <button className="header__button" onClick={handleShuffle}>
         Shuffle
       </button>
     </div>
