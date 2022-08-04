@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import './Header.css';
+import { ImStatsBars } from 'react-icons/im';
 
 const Header = ({
   handleArrayGenerate,
@@ -19,14 +20,14 @@ const Header = ({
     handleBarNumberChange(arraySize);
   };
   return (
-    <header className="header">
-      <h3 className="header__array-generate-button" onClick={handleArrayGenerate}>
+    <div className="header">
+      <button className="generate__array__button" onClick={handleArrayGenerate}>
         Generate New Array
-      </h3>
-      <form onSubmit={handleSubmit} className="header__form">
+      </button>
+      <form onSubmit={handleSubmit} className="bar__selection">
         <input
           typeof="number"
-          className="header__input"
+          className="bar__selection__input"
           placeholder="How many bars should be sorted?"
           onChange={(e) => {
             setArraySize((prev) => {
@@ -34,26 +35,18 @@ const Header = ({
             });
           }}
         ></input>
+        <ImStatsBars className="bar__selection__icon" />
       </form>
-      <button className="header__button" onClick={handleMergeSort}>
-        Merge Sort
-      </button>
-      <button className="header__button" onClick={handleBubbleSort}>
-        Bubble Sort
-      </button>
-      <button className="header__button" onClick={handleSelectionSort}>
-        Selection Sort
-      </button>
-      <button className="header__button" onClick={handleInsertionSort}>
-        Insertion Sort
-      </button>
       <button className="header__button" onClick={handleStop}>
         Stop
       </button>
       <button className="header__button" onClick={handleResume}>
         Resume
       </button>
-    </header>
+      <button className="header__button" onClick={handleResume}>
+        Shuffle
+      </button>
+    </div>
   );
 };
 

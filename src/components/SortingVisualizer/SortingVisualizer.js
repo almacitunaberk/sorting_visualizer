@@ -7,9 +7,9 @@ import {
   bubbleSort,
   selectionSort,
   insertionSort,
-} from './sortingAlgorithms/sortingAlgorithms';
-import Header from './Header';
-import './SortingVisualizer.css';
+} from '../../sortingAlgorithms/sortingAlgorithms';
+import Header from '../Header/Header';
+import './SortingVisualizer.module.css';
 
 var Timer = function (callback, delay) {
   var timerId,
