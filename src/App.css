@@ -1,4 +1,4 @@
 .app__container {
   display: grid;
-  grid-template-columns: 2fr 10fr;
+  grid-template-columns: max-content 1fr;
 }

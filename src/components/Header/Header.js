@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import './Header.css';
 import { ImStatsBars } from 'react-icons/im';
-
+import { HiMenu } from 'react-icons/hi';
+import { toggle } from '../../redux/slices/toggleDashboard';
 const Header = ({
   handleArrayGenerate,
   handleBarNumberChange,
@@ -12,8 +13,7 @@ const Header = ({
   handleResume,
   handleShuffle,
 }) => {
-  const selectedAlgo = useSelector((state) => state.selectedAlgo);
-
+  const dispatch = useDispatch();
   const [arraySize, setArraySize] = useState(0);
 
   const handleSubmit = (e) => {
@@ -21,8 +21,15 @@ const Header = ({
     handleBarNumberChange(arraySize);
   };
 
+  const handleToggleMenuClick = () => {
+    dispatch(toggle());
+  };
+
   return (
     <div className="header">
+      <div onClick={handleToggleMenuClick}>
+        <HiMenu className="toggle__button" />
+      </div>
       <button className="generate__array__button" onClick={handleArrayGenerate}>
         Generate New Array
       </button>

@@ -5,10 +5,11 @@ import { IoGitMergeSharp } from 'react-icons/io5';
 import { FaSortAmountDown } from 'react-icons/fa';
 import { GiClick } from 'react-icons/gi';
 import { BiDownload } from 'react-icons/bi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { changeAlgo } from '../../redux/slices/selectedAlgo';
 
 const Dashboard = () => {
+  const toggle = useSelector((state) => state.toggleDashboard);
   const dispatch = useDispatch();
   const [selectedAlgo, setSelectedAlgo] = useState('merge');
 
@@ -31,7 +32,7 @@ const Dashboard = () => {
 
   return (
     <div className="container">
-      <div className="navigation">
+      <div className={`navigation ${toggle.toggle && 'toggle'}`}>
         <ul className="navigation__list">
           <li className="app__name">
             <a className="app__name-tag" href="#">
