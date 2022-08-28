@@ -18,12 +18,12 @@
 }
 
 .navigation__list {
-  height: 100%;
-  display: grid;
   grid-template-rows: repeat(8, 1fr);
+  align-content: center;
   row-gap: 3rem;
-  justify-content: center;
-  align-items: start;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .algo__link {
@@ -33,6 +33,10 @@
   padding: 1rem;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+
+.algo__link:not(:last-of-type) {
+  margin-bottom: 1rem;
 }
 
 .algo__link:hover,
@@ -91,8 +95,6 @@
 .app__name {
   width: 100%;
   list-style: none;
-  grid-row-start: 1;
-  grid-row-end: 3;
 }
 
 .app__name-tag {

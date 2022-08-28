@@ -40,15 +40,15 @@ const Dashboard = () => {
   return (
     <div className="container">
       <div className={`navigation ${toggle && 'toggle'}`}>
+        <div className="app__name">
+          <a className="app__name-tag" href="#">
+            <span className="app__icon">
+              <FaSortAmountDown className="app__icon" />
+            </span>
+            <span className="app__name-title">Sortalizer</span>
+          </a>
+        </div>
         <ul className="navigation__list">
-          <li className="app__name">
-            <a className="app__name-tag" href="#">
-              <span className="app__icon">
-                <FaSortAmountDown className="app__icon" />
-              </span>
-              <span className="app__name-title">Sortalizer</span>
-            </a>
-          </li>
           <li className={`algo__link ${selectedAlgo === 'merge' && 'clicked'}`} onClick={mergeSelected} id="merge">
             <a className="algo__link--tag" href="#">
               <span className="algo__icon--container">
