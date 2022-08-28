@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setToggleFalse, setToggleTrue } from './redux/slices/toggleDashboard';
 
 const App = () => {
+  
   const dispatch = useDispatch();
 
   const dashboardBehavior = () => {

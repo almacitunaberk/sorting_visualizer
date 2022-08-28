@@ -98,7 +98,6 @@ export const selectionSort = (array) => {
 };
 
 export const insertionSort = (array) => {
-  //console.log(array);
   const animations = [];
   for (let i = 1; i < array.length; i++) {
     let index = i;
@@ -121,26 +120,75 @@ export const insertionSort = (array) => {
 
 export const heapSort = (array) => {};
 
-export const quickSort = (array, startIndex = 0, endIndex = array.length - 1, animations) => {
-  if (startIndex >= endIndex) return animations;
-  let index = quickSortHelper(array, startIndex, endIndex);
-  quickSort(array, startIndex, index - 1);
-  quickSort(array, index + 1, endIndex);
+export const quickSort = (array) => {
+  const animations = [];
+  return quickSortHelper(array, 0, array.length - 1, animations);
 };
 
-const quickSortHelper = (array, startIndex, endIndex, animations) => {
-  let pivot = array[startIndex];
-  let index = startIndex;
-  for (let i = startIndex + 1; i < endIndex; i++) {
-    if (pivot > array[i]) {
-      index++;
-      const temp = array[i];
-      array[i] = array[index];
-      array[index] = temp;
+const quickSortHelper = (array, left, right, animations) => {
+  let i;
+  if (array.length > 1) {
+    i = partition(array, left, right, animations);
+    if (left < i - 1) {
+      quickSortHelper(array, left, i - 1, animations);
+    }
+    if (i < right) {
+      quickSortHelper(array, i, right, animations);
     }
   }
-  const temp = array[index];
-  array[index] = pivot;
-  array[startIndex] = temp;
-  return index;
+  return animations;
+};
+
+const partition = (array, startIndex, endIndex, animations) => {
+  const pivotIndex = Math.floor((startIndex + endIndex) / 2);
+  let changedPivotIndex = pivotIndex;
+  let pivot = array[pivotIndex];
+  animations.push(['pivotStart', pivotIndex, null]);
+  let leftIndex = startIndex;
+  let rightIndex = endIndex;
+  while (leftIndex <= rightIndex) {
+    while (array[leftIndex] < pivot) {
+      animations.push(['comparisonWithPivotStart', leftIndex, pivotIndex]);
+      animations.push(['comparisonWithPivotEnd', leftIndex, pivotIndex]);
+      leftIndex++;
+    }
+    while (array[rightIndex] > pivot) {
+      animations.push(['comparisonWithPivotStart', rightIndex, pivotIndex]);
+      animations.push(['comparisonWithPivotEnd', rightIndex, pivotIndex]);
+      rightIndex--;
+    }
+    if (leftIndex <= rightIndex) {
+      if (leftIndex !== pivotIndex) {
+        animations.push(['comparisonWithPivotStart', leftIndex, pivotIndex]);
+        animations.push(['comparisonWithPivotEnd', leftIndex, pivotIndex]);
+      }
+      if (rightIndex !== pivotIndex) {
+        animations.push(['comparisonWithPivotStart', rightIndex, pivotIndex]);
+        animations.push(['comparisonWithPivotEnd', rightIndex, pivotIndex]);
+      }
+      if (leftIndex !== pivotIndex) {
+        animations.push(['changeColor', leftIndex]);
+      }
+      if (rightIndex !== pivotIndex) {
+        animations.push(['changeColor', rightIndex]);
+      }
+      const temp = array[leftIndex];
+      const isPivotLeft = leftIndex === pivotIndex;
+      const isPivotRight = rightIndex === pivotIndex;
+      if (isPivotLeft) {
+        changedPivotIndex = rightIndex;
+      }
+      if (isPivotRight) {
+        changedPivotIndex = leftIndex;
+      }
+      animations.push(['changeValue', leftIndex, array[rightIndex], isPivotRight]);
+      array[leftIndex] = array[rightIndex];
+      animations.push(['changeValue', rightIndex, temp, isPivotLeft]);
+      array[rightIndex] = temp;
+      leftIndex++;
+      rightIndex--;
+    }
+  }
+  animations.push(['pivotEnd', changedPivotIndex]);
+  return leftIndex;
 };

@@ -85,7 +85,6 @@ const SortingVisualizer = () => {
 
   const handleStart = () => {
     sortingStarted = true;
-    console.log(selectedAlgo.algo);
     switch (selectedAlgo.algo) {
       case 'merge': {
         handleMergeSort();
@@ -101,6 +100,10 @@ const SortingVisualizer = () => {
       }
       case 'selection': {
         handleSelectionSort();
+        break;
+      }
+      case 'quickSort': {
+        handleQuickSort();
         break;
       }
     }
@@ -186,7 +189,6 @@ const SortingVisualizer = () => {
 
   const handleInsertionSort = () => {
     const animations = insertionSort(array);
-    // console.log(animations);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const [type, _, __] = animations[i];
@@ -198,7 +200,7 @@ const SortingVisualizer = () => {
           const firstTimer = new Timer(function () {
             barOneStyle.backgroundColor = 'red';
             barTwoStyle.backgroundColor = 'red';
-          }, i * 10);
+          }, i * 100);
           firstTimers.push(firstTimer);
           break;
         case 'swap':
@@ -207,7 +209,7 @@ const SortingVisualizer = () => {
             const barStyle = arrayBars[barIdx].style;
             barStyle.height = `${(newHeight / largestValue) * 100}%`;
             barStyle.backgroundColor = 'green';
-          }, i * 10);
+          }, i * 100);
           firstTimers.push(_firstTimer);
           break;
         case 'final':
@@ -216,7 +218,7 @@ const SortingVisualizer = () => {
             const barStyle = arrayBars[barIdx].style;
             barStyle.height = `${(newHeight / largestValue) * 100}%`;
             barStyle.backgroundColor = 'green';
-          }, i * 10);
+          }, i * 100);
           secondTimers.push(secondTimer);
           break;
         case 'color_change':
@@ -226,8 +228,72 @@ const SortingVisualizer = () => {
             const barTwoStyle = arrayBars[barTwoIdx].style;
             barOneStyle.backgroundColor = 'green';
             barTwoStyle.backgroundColor = 'green';
-          }, i * 10);
+          }, i * 100);
           firstTimers.push(__firstTimer);
+          break;
+      }
+    }
+  };
+
+  const handleQuickSort = () => {
+    const animations = quickSort(array);
+    console.table(animations);
+    for (let i = 0; i < animations.length; i++) {
+      console.log(i);
+      const arrayBars = document.getElementsByClassName('array-bar');
+      const [type, _, __] = animations[i];
+      let timer;
+      switch (type) {
+        case 'comparisonWithPivotStart':
+          timer = new Timer(function () {
+            const [_, index, __] = animations[i];
+            const barStyle = arrayBars[index].style;
+            barStyle.backgroundColor = 'red';
+          }, i * 1000);
+          firstTimers.push(timer);
+          break;
+        case 'comparisonWithPivotEnd':
+          timer = new Timer(function () {
+            const [_, index, __] = animations[i];
+            const barStyle = arrayBars[index].style;
+            barStyle.backgroundColor = 'green';
+          }, i * 1000);
+          firstTimers.push(timer);
+          break;
+        case 'changeValue':
+          timer = new Timer(function () {
+            const [_, index, value, isPivot] = animations[i];
+            const barStyle = arrayBars[index].style;
+            barStyle.height = `${(value / largestValue) * 100}%`;
+            if (!isPivot) {
+              barStyle.backgroundColor = 'green';
+            } else {
+              barStyle.backgroundColor = 'purple';
+            }
+          }, i * 1000);
+          firstTimers.push(timer);
+          break;
+        case 'changeColor':
+          timer = new Timer(function () {
+            const [_, index] = animations[i];
+            const barStyle = arrayBars[index].style;
+            barStyle.backgroundColor = 'orange';
+          }, i * 1000);
+          firstTimers.push(timer);
+          break;
+        case 'pivotStart':
+          timer = new Timer(function () {
+            const [_, pivotIndex, __] = animations[i];
+            arrayBars[pivotIndex].style.backgroundColor = 'purple';
+          }, i * 1000);
+          firstTimers.push(timer);
+          break;
+        case 'pivotEnd':
+          timer = new Timer(function () {
+            const [_, pivotIndex] = animations[i];
+            arrayBars[pivotIndex].style.backgroundColor = 'green';
+          }, i * 1000);
+          firstTimers.push(timer);
           break;
       }
     }

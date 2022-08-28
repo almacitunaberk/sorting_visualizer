@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
 import { RiBubbleChartFill } from 'react-icons/ri';
+import { BiRun } from 'react-icons/bi';
 import { IoGitMergeSharp } from 'react-icons/io5';
 import { FaSortAmountDown } from 'react-icons/fa';
 import { GiClick } from 'react-icons/gi';
@@ -12,6 +13,7 @@ const Dashboard = () => {
   const _toggle = useSelector((state) => state.toggleDashboard);
   const toggle = _toggle.toggle;
   const dispatch = useDispatch();
+
   const [selectedAlgo, setSelectedAlgo] = useState('merge');
 
   const mergeSelected = (e) => {
@@ -29,6 +31,10 @@ const Dashboard = () => {
   const selectionSelected = () => {
     setSelectedAlgo('selection');
     dispatch(changeAlgo('selection'));
+  };
+  const quickSortSelected = () => {
+    setSelectedAlgo('quickSort');
+    dispatch(changeAlgo('quickSort'));
   };
 
   return (
@@ -69,6 +75,18 @@ const Dashboard = () => {
                 <GiClick className="algo__icon" />
               </span>
               <span className="algo__title ">Selection Sort</span>
+            </a>
+          </li>
+          <li
+            className={`algo__link ${selectedAlgo === 'quickSort' && 'clicked'}`}
+            onClick={quickSortSelected}
+            id="quickSort"
+          >
+            <a className="algo__link--tag" href="#">
+              <span className="algo__icon--container">
+                <BiRun className="algo__icon" />
+              </span>
+              <span className="algo__title ">Quick Sort</span>
             </a>
           </li>
           <li
