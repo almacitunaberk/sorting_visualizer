@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   mergeSort,
   quickSort,
@@ -9,45 +9,28 @@ import {
   selectionSort,
   insertionSort,
 } from '../../sortingAlgorithms/sortingAlgorithms';
+import { setArraySize, setArray, setLargestValue } from '../../redux/slices/arraySlice';
 import Header from '../Header/Header';
 import './SortingVisualizer.css';
-
-var Timer = function (callback, delay) {
-  var timerId,
-    start,
-    remaining = delay;
-
-  this.pause = function () {
-    window.clearTimeout(timerId);
-    timerId = null;
-    remaining -= Date.now() - start;
-  };
-
-  this.resume = function () {
-    if (timerId) {
-      return;
-    }
-
-    start = Date.now();
-    timerId = window.setTimeout(callback, remaining);
-  };
-
-  this.resume();
-};
+import Timer from '../../utils/Timer';
 
 const SortingVisualizer = () => {
   const selectedAlgo = useSelector((state) => state.selectedAlgo);
-  const _arraySize = window.localStorage.getItem('arraySize') ? window.localStorage.getItem('arraySize') : 300;
-  const [array, setArray] = useState([]);
-  const [arraySize, setArraySize] = useState(_arraySize);
-  const [largestValue, setLargestValue] = useState(10);
+  const arrayState = useSelector((state) => state.arrayState);
+  const { arraySize, largestValue, array } = arrayState;
+  const [wait, setWait] = useState(false);
+  // const _arraySize = window.localStorage.getItem('arraySize') || 300;
+  //const [array, setArray] = useState([]);
+  //const [arraySize, setArraySize] = useState(_arraySize);
+  //const [largestValue, setLargestValue] = useState(10);
   let sortingStarted = useRef(false);
-  let wait = false;
 
-  let firstTimers = [];
-  let secondTimers = [];
+  const dispatch = useDispatch();
 
-  const resetArray = () => {
+  let firstTimers = useRef([]);
+  let secondTimers = useRef([]);
+
+  const generateRandomArray = () => {
     const newArray = [];
     let tempLargestVal = 0;
     for (let i = 0; i < arraySize; i++) {
@@ -60,19 +43,15 @@ const SortingVisualizer = () => {
     const bars = document.getElementsByClassName('array-bar');
     for (let i = 0; i < bars.length; i++) {
       bars[i].className = 'array-bar';
+      bars[i].style.backgroundColor = '#287bff';
     }
-    setArray(newArray);
-    setLargestValue(tempLargestVal);
+    return [newArray, tempLargestVal];
   };
 
-  const generateNewArray = () => {
-    //window.location.reload(false);
-    if (sortingStarted) {
-      sortingStarted = false;
-      window.location.reload();
-    } else {
-      resetArray();
-    }
+  const resetArray = () => {
+    const [newArray, newLargestValue] = generateRandomArray();
+    dispatch(setArray(newArray));
+    dispatch(setLargestValue(newLargestValue));
   };
 
   useEffect(() => {
@@ -114,7 +93,8 @@ const SortingVisualizer = () => {
   };
 
   const handleMergeSort = () => {
-    const animations = mergeSort(array);
+    const copyArray = array.slice();
+    const animations = mergeSort(copyArray);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const isColorChange = i % 3 !== 2;
@@ -127,20 +107,21 @@ const SortingVisualizer = () => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
         }, i * 100);
-        firstTimers.push(firstTimer);
+        firstTimers.current.push(firstTimer);
       } else {
         const secondTimer = new Timer(function () {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${(newHeight / largestValue) * 100}%`;
         }, i * 100);
-        secondTimers.push(secondTimer);
+        secondTimers.current.push(secondTimer);
       }
     }
   };
 
   const handleBubbleSort = () => {
-    const animations = bubbleSort(array);
+    const copyArray = array.slice();
+    const animations = bubbleSort(copyArray);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const isComparison = i % 3 === 0;
@@ -152,7 +133,7 @@ const SortingVisualizer = () => {
           barOneStyle.backgroundColor = 'red';
           barTwoStyle.backgroundColor = 'red';
         }, i * 100);
-        firstTimers.push(firstTimer);
+        firstTimers.current.push(firstTimer);
       } else {
         const secondTimer = new Timer(function () {
           const [barIdx, newHeight] = animations[i];
@@ -160,13 +141,14 @@ const SortingVisualizer = () => {
           barStyle.height = `${(newHeight / largestValue) * 100}%`;
           barStyle.backgroundColor = 'green';
         }, i * 100);
-        secondTimers.push(secondTimer);
+        secondTimers.current.push(secondTimer);
       }
     }
   };
 
   const handleSelectionSort = () => {
-    const animations = selectionSort(array);
+    const copyArray = array.slice();
+    const animations = selectionSort(copyArray);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const isComparison = i % 3 === 0;
@@ -178,7 +160,7 @@ const SortingVisualizer = () => {
           barOneStyle.backgroundColor = 'red';
           barTwoStyle.backgroundColor = 'red';
         }, i * 100);
-        firstTimers.push(firstTimer);
+        firstTimers.current.push(firstTimer);
       } else {
         const secondTimer = new Timer(function () {
           const [barIdx, newHeight] = animations[i];
@@ -186,13 +168,14 @@ const SortingVisualizer = () => {
           barStyle.height = `${(newHeight / largestValue) * 100}%`;
           barStyle.backgroundColor = 'green';
         }, i * 100);
-        secondTimers.push(secondTimer);
+        secondTimers.current.push(secondTimer);
       }
     }
   };
 
   const handleInsertionSort = () => {
-    const animations = insertionSort(array);
+    const copyArray = array.slice();
+    const animations = insertionSort(copyArray);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const [type, _, __] = animations[i];
@@ -205,7 +188,7 @@ const SortingVisualizer = () => {
             barOneStyle.backgroundColor = 'red';
             barTwoStyle.backgroundColor = 'red';
           }, i * 100);
-          firstTimers.push(firstTimer);
+          firstTimers.current.push(firstTimer);
           break;
         case 'swap':
           const _firstTimer = new Timer(function () {
@@ -214,7 +197,7 @@ const SortingVisualizer = () => {
             barStyle.height = `${(newHeight / largestValue) * 100}%`;
             barStyle.backgroundColor = 'green';
           }, i * 100);
-          firstTimers.push(_firstTimer);
+          firstTimers.current.push(_firstTimer);
           break;
         case 'final':
           const secondTimer = new Timer(function () {
@@ -223,7 +206,7 @@ const SortingVisualizer = () => {
             barStyle.height = `${(newHeight / largestValue) * 100}%`;
             barStyle.backgroundColor = 'green';
           }, i * 100);
-          secondTimers.push(secondTimer);
+          secondTimers.current.push(secondTimer);
           break;
         case 'color_change':
           const __firstTimer = new Timer(function () {
@@ -233,14 +216,15 @@ const SortingVisualizer = () => {
             barOneStyle.backgroundColor = 'green';
             barTwoStyle.backgroundColor = 'green';
           }, i * 100);
-          firstTimers.push(__firstTimer);
+          firstTimers.current.push(__firstTimer);
           break;
       }
     }
   };
 
   const handleQuickSort = () => {
-    const animations = quickSort(array);
+    const copyArray = array.slice();
+    const animations = quickSort(copyArray);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const [type, _, __] = animations[i];
@@ -252,7 +236,7 @@ const SortingVisualizer = () => {
             const barStyle = arrayBars[index].style;
             barStyle.backgroundColor = 'red';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'comparisonWithPivotEnd':
           timer = new Timer(function () {
@@ -260,7 +244,7 @@ const SortingVisualizer = () => {
             const barStyle = arrayBars[index].style;
             barStyle.backgroundColor = 'green';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'changeValue':
           timer = new Timer(function () {
@@ -273,7 +257,7 @@ const SortingVisualizer = () => {
               barStyle.backgroundColor = 'purple';
             }
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'changeColor':
           timer = new Timer(function () {
@@ -281,28 +265,29 @@ const SortingVisualizer = () => {
             const barStyle = arrayBars[index].style;
             barStyle.backgroundColor = 'orange';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'pivotStart':
           timer = new Timer(function () {
             const [_, pivotIndex, __] = animations[i];
             arrayBars[pivotIndex].style.backgroundColor = 'purple';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'pivotEnd':
           timer = new Timer(function () {
             const [_, pivotIndex] = animations[i];
             arrayBars[pivotIndex].style.backgroundColor = 'green';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
       }
     }
   };
 
   const handleHeapSort = () => {
-    const animations = heapSort(array);
+    const copyArray = array.slice();
+    const animations = heapSort(copyArray);
     const arrayBars = document.getElementsByClassName('array-bar');
     for (let i = 0; i < animations.length; i++) {
       const [type, _, __] = animations[i];
@@ -316,7 +301,7 @@ const SortingVisualizer = () => {
             barStyle.backgroundColor = 'red';
             largestBarStyle.backgroundColor = 'purple';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'comparisonWithLargestEnd':
           timer = new Timer(() => {
@@ -326,7 +311,7 @@ const SortingVisualizer = () => {
             barStyle.backgroundColor = 'orange';
             largestBarStyle.backgroundColor = 'purple';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'largestChanged':
           timer = new Timer(() => {
@@ -336,7 +321,7 @@ const SortingVisualizer = () => {
             barStyle.backgroundColor = 'purple';
             prevBarStyle.backgroundColor = 'orange';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'rootChangingStart':
           timer = new Timer(() => {
@@ -346,7 +331,7 @@ const SortingVisualizer = () => {
             barStyle.backgroundColor = 'purple';
             rootStyle.backgroundColor = 'orange';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'newRootValue':
           timer = new Timer(() => {
@@ -355,7 +340,7 @@ const SortingVisualizer = () => {
             barStyle.height = `${(value / largestValue) * 100}%`;
             barStyle.color = 'green';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'newChildValue':
           timer = new Timer(() => {
@@ -364,7 +349,7 @@ const SortingVisualizer = () => {
             barStyle.height = `${(value / largestValue) * 100}%`;
             barStyle.backgroundColor = 'green';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'rootChangingEnd':
           timer = new Timer(() => {
@@ -372,7 +357,7 @@ const SortingVisualizer = () => {
             arrayBars[firstIndex].style.backgroundColor = 'green';
             arrayBars[secondIndex].style.backgroundColor = 'green';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'rootPutToTheEndStart':
           timer = new Timer(() => {
@@ -380,21 +365,21 @@ const SortingVisualizer = () => {
             arrayBars[endIndex].style.backgroundColor = 'orange';
             arrayBars[rootIndex].style.backgroundColor = 'orange';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'newRoot2':
           timer = new Timer(() => {
             const [_, rootIndex, value] = animations[i];
             arrayBars[rootIndex].style.height = `${(value / largestValue) * 100}%`;
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'newChild2':
           timer = new Timer(() => {
             const [_, childIndex, value] = animations[i];
             arrayBars[childIndex].style.height = `${(value / largestValue) * 100}%`;
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
         case 'rootPutToTheEndEnd':
           timer = new Timer(() => {
@@ -402,51 +387,44 @@ const SortingVisualizer = () => {
             arrayBars[endIndex].style.backgroundColor = 'green';
             arrayBars[endIndex].style.backgroundColor = 'green';
           }, i * 100);
-          firstTimers.push(timer);
+          firstTimers.current.push(timer);
           break;
       }
     }
   };
 
-  const handleStop = () => {
-    wait = true;
-    firstTimers.forEach((timer) => {
-      timer.pause();
-    });
-    secondTimers.forEach((timer) => {
-      timer.pause();
-    });
-    wait = false;
+  const handleStopResume = () => {
+    if (!wait) {
+      firstTimers.current.forEach((timer) => {
+        timer.pause();
+      });
+      secondTimers.current.forEach((timer) => {
+        timer.pause();
+      });
+    } else {
+      firstTimers.current.forEach((timer) => {
+        timer.resume();
+      });
+      secondTimers.current.forEach((timer) => {
+        timer.resume();
+      });
+    }
+    setWait((prev) => !prev);
   };
 
   const handleResume = () => {
     if (wait) {
       return;
     }
-    firstTimers.forEach((timer) => {
-      timer.resume();
-    });
-    secondTimers.forEach((timer) => {
-      timer.resume();
-    });
-  };
-
-  const handleShuffle = () => {
-    generateNewArray();
   };
 
   return (
     <div className="srt__visual__container">
       <Header
-        handleArrayGenerate={generateNewArray}
-        handleBarNumberChange={(value) => {
-          window.localStorage.setItem('arraySize', value);
-          setArraySize(value);
-        }}
+        handleArrayGenerate={resetArray}
         handleStart={handleStart}
-        handleStop={handleStop}
-        handleResume={handleResume}
-        handleShuffle={handleShuffle}
+        handleStopResume={handleStopResume}
+        wait={wait}
       />
       <div className="bar__container">
         {array.map((value, idx) => (

@@ -1,26 +1,15 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './Header.css';
 import { ImStatsBars } from 'react-icons/im';
 import { HiMenu } from 'react-icons/hi';
 import { toggle } from '../../redux/slices/toggleDashboard';
-const Header = ({
-  handleArrayGenerate,
-  handleBarNumberChange,
-  handleStart,
-  handleStop,
-  handleResume,
-  handleShuffle,
-}) => {
+import { setArraySize } from '../../redux/slices/arraySlice';
+
+const Header = ({ handleArrayGenerate, handleStart, handleStopResume, wait }) => {
   const dispatch = useDispatch();
-  const [arraySize, setArraySize] = useState(0);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleBarNumberChange(arraySize);
-  };
-
+  const inputRef = useRef(null);
   const handleToggleMenuClick = () => {
     dispatch(toggle());
   };
@@ -33,31 +22,32 @@ const Header = ({
       <button className="generate__array__button" onClick={handleArrayGenerate}>
         Generate New Array
       </button>
-      <form onSubmit={handleSubmit} className="bar__selection">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          dispatch(setArraySize(inputRef.current.value));
+        }}
+        className="bar__selection"
+      >
         <input
+          ref={inputRef}
           typeof="number"
           className="bar__selection__input"
           placeholder="How many bars should be sorted?"
-          onChange={(e) => {
-            setArraySize((prev) => {
-              return e.target.value;
-            });
-          }}
         ></input>
         <ImStatsBars className="bar__selection__icon" />
       </form>
       <button className="header__button" onClick={handleStart}>
         Start
       </button>
-      <button className="header__button" onClick={handleStop}>
-        Stop
+      <button className="header__button" onClick={handleStopResume}>
+        {wait ? 'Resume' : 'Stop'}
       </button>
-      <button className="header__button" onClick={handleResume}>
+      {/*
+      <button className={`header__button ${!wait && 'header__button--disabled'}`} onClick={handleResume}>
         Resume
       </button>
-      <button className="header__button" onClick={handleShuffle}>
-        Shuffle
-      </button>
+      */}
     </div>
   );
 };

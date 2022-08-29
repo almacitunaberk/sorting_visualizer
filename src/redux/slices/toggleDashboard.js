@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const toggleDashboardSlice = createSlice({
+const toggleDashboardSlice = createSlice({
   name: 'toggleDashboard',
   initialState: {
     toggle: false,

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const selectedAlgoSlice = createSlice({
+const selectedAlgoSlice = createSlice({
   name: 'selectedAlgo',
   initialState: {
     algo: 'merge',
