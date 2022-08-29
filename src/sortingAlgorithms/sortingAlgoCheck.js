@@ -41,5 +41,44 @@ const quickSortHelper = (arr, startIndex, endIndex, animations) => {
   }
   return i;
 };
+
+const heapSort = (array) => {
+  let N = array.length;
+
+  for (let i = Math.floor(N / 2) - 1; i >= 0; i--) {
+    heapify(array, N, i);
+  }
+
+  for (let i = N - 1; i >= 0; i--) {
+    let temp = array[0];
+    array[0] = array[i];
+    array[i] = temp;
+    heapify(array, i, 0);
+  }
+
+  return array;
+};
+
+const heapify = (array, n, i) => {
+  let largest = i;
+  let left = 2 * i + 1;
+  let right = 2 * i + 2;
+
+  if (left < n && array[left] > array[largest]) {
+    largest = left;
+  }
+
+  if (right < n && array[right] > array[largest]) {
+    largest = right;
+  }
+
+  if (largest !== i) {
+    let temp = array[i];
+    array[i] = array[largest];
+    array[largest] = temp;
+    heapify(array, n, largest);
+  }
+};
+
 const array = [3, 7, 1, 6, 12, 34, 78, 23, 45, 42, 57, 37, 83, 53];
-console.table(_quickSort(array, 0, array.length - 1));
+console.table(heapSort(array));

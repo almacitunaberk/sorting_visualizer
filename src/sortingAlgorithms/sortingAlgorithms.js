@@ -118,7 +118,61 @@ export const insertionSort = (array) => {
   return animations;
 };
 
-export const heapSort = (array) => {};
+export const heapSort = (array) => {
+  const animations = [];
+  let n = array.length;
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    heapify(array, n, i, animations);
+  }
+
+  for (let i = n - 1; i >= 0; i--) {
+    animations.push(['rootPutToTheEndStart', i, 0]);
+    animations.push(['newRoot2', 0, array[i]]);
+    animations.push(['newChild2', i, array[0]]);
+    let temp = array[0];
+    array[0] = array[i];
+    array[i] = temp;
+    animations.push(['rootPutToTheEndEnd', i, 0]);
+    heapify(array, i, 0, animations);
+  }
+  console.table(array);
+  return animations;
+};
+
+const heapify = (array, n, i, animations) => {
+  let largest = i;
+  let left = 2 * i + 1;
+  let right = 2 * i + 2;
+
+  if (left < n) {
+    animations.push(['comparisonWithLargestStart', left, largest]);
+    if (array[left] > array[largest]) {
+      animations.push(['largestChanged', left, largest]);
+      largest = left;
+    }
+    animations.push(['comparisonWithLargestEnd', left, largest]);
+  }
+
+  if (right < n) {
+    animations.push(['comparisonWithLargestStart', right, largest]);
+    if (array[right] > array[largest]) {
+      animations.push(['largestChanged', right, largest]);
+      largest = right;
+    }
+    animations.push(['comparisonWithLargestEnd', left, largest]);
+  }
+
+  if (largest !== i) {
+    animations.push(['rootChangingStart', largest, i]);
+    animations.push(['newRootValue', i, array[largest]]);
+    animations.push(['newChildValue', largest, array[i]]);
+    let temp = array[i];
+    array[i] = array[largest];
+    array[largest] = temp;
+    animations.push(['rootChangingEnd', largest, i]);
+    heapify(array, n, largest, animations);
+  }
+};
 
 export const quickSort = (array) => {
   const animations = [];

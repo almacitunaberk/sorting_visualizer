@@ -6,6 +6,7 @@ import { IoGitMergeSharp } from 'react-icons/io5';
 import { FaSortAmountDown } from 'react-icons/fa';
 import { GiClick } from 'react-icons/gi';
 import { BiDownload } from 'react-icons/bi';
+import { BiGitPullRequest } from 'react-icons/bi';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeAlgo } from '../../redux/slices/selectedAlgo';
 
@@ -33,8 +34,12 @@ const Dashboard = () => {
     dispatch(changeAlgo('selection'));
   };
   const quickSortSelected = () => {
-    setSelectedAlgo('quickSort');
-    dispatch(changeAlgo('quickSort'));
+    setSelectedAlgo('quick');
+    dispatch(changeAlgo('quick'));
+  };
+  const heapSortSelected = () => {
+    setSelectedAlgo('heap');
+    dispatch(changeAlgo('heap'));
   };
 
   return (
@@ -57,6 +62,26 @@ const Dashboard = () => {
               <span className="algo__title ">Merge Sort</span>
             </a>
           </li>
+          <li
+            className={`algo__link ${selectedAlgo === 'quick' && 'clicked'}`}
+            onClick={quickSortSelected}
+            id="quickSort"
+          >
+            <a className="algo__link--tag" href="#">
+              <span className="algo__icon--container">
+                <BiRun className="algo__icon" />
+              </span>
+              <span className="algo__title ">Quick Sort</span>
+            </a>
+          </li>
+          <li className={`algo__link ${selectedAlgo === 'heap' && 'clicked'}`} onClick={heapSortSelected} id="heapSort">
+            <a className="algo__link--tag" href="#">
+              <span className="algo__icon--container">
+                <BiGitPullRequest className="algo__icon" />
+              </span>
+              <span className="algo__title ">Heap Sort</span>
+            </a>
+          </li>
           <li className={`algo__link ${selectedAlgo === 'bubble' && 'clicked'}`} onClick={bubbleSelected} id="bubble">
             <a className="algo__link--tag" href="#">
               <span className="algo__icon--container">
@@ -75,18 +100,6 @@ const Dashboard = () => {
                 <GiClick className="algo__icon" />
               </span>
               <span className="algo__title ">Selection Sort</span>
-            </a>
-          </li>
-          <li
-            className={`algo__link ${selectedAlgo === 'quickSort' && 'clicked'}`}
-            onClick={quickSortSelected}
-            id="quickSort"
-          >
-            <a className="algo__link--tag" href="#">
-              <span className="algo__icon--container">
-                <BiRun className="algo__icon" />
-              </span>
-              <span className="algo__title ">Quick Sort</span>
             </a>
           </li>
           <li

@@ -102,8 +102,12 @@ const SortingVisualizer = () => {
         handleSelectionSort();
         break;
       }
-      case 'quickSort': {
+      case 'quick': {
         handleQuickSort();
+        break;
+      }
+      case 'heap': {
+        handleHeapSort();
         break;
       }
     }
@@ -237,9 +241,7 @@ const SortingVisualizer = () => {
 
   const handleQuickSort = () => {
     const animations = quickSort(array);
-    console.table(animations);
     for (let i = 0; i < animations.length; i++) {
-      console.log(i);
       const arrayBars = document.getElementsByClassName('array-bar');
       const [type, _, __] = animations[i];
       let timer;
@@ -249,7 +251,7 @@ const SortingVisualizer = () => {
             const [_, index, __] = animations[i];
             const barStyle = arrayBars[index].style;
             barStyle.backgroundColor = 'red';
-          }, i * 1000);
+          }, i * 100);
           firstTimers.push(timer);
           break;
         case 'comparisonWithPivotEnd':
@@ -257,7 +259,7 @@ const SortingVisualizer = () => {
             const [_, index, __] = animations[i];
             const barStyle = arrayBars[index].style;
             barStyle.backgroundColor = 'green';
-          }, i * 1000);
+          }, i * 100);
           firstTimers.push(timer);
           break;
         case 'changeValue':
@@ -270,7 +272,7 @@ const SortingVisualizer = () => {
             } else {
               barStyle.backgroundColor = 'purple';
             }
-          }, i * 1000);
+          }, i * 100);
           firstTimers.push(timer);
           break;
         case 'changeColor':
@@ -278,21 +280,128 @@ const SortingVisualizer = () => {
             const [_, index] = animations[i];
             const barStyle = arrayBars[index].style;
             barStyle.backgroundColor = 'orange';
-          }, i * 1000);
+          }, i * 100);
           firstTimers.push(timer);
           break;
         case 'pivotStart':
           timer = new Timer(function () {
             const [_, pivotIndex, __] = animations[i];
             arrayBars[pivotIndex].style.backgroundColor = 'purple';
-          }, i * 1000);
+          }, i * 100);
           firstTimers.push(timer);
           break;
         case 'pivotEnd':
           timer = new Timer(function () {
             const [_, pivotIndex] = animations[i];
             arrayBars[pivotIndex].style.backgroundColor = 'green';
-          }, i * 1000);
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+      }
+    }
+  };
+
+  const handleHeapSort = () => {
+    const animations = heapSort(array);
+    const arrayBars = document.getElementsByClassName('array-bar');
+    for (let i = 0; i < animations.length; i++) {
+      const [type, _, __] = animations[i];
+      let timer;
+      switch (type) {
+        case 'comparisonWithLargestStart':
+          timer = new Timer(() => {
+            const [_, index, largest] = animations[i];
+            const barStyle = arrayBars[index].style;
+            const largestBarStyle = arrayBars[largest].style;
+            barStyle.backgroundColor = 'red';
+            largestBarStyle.backgroundColor = 'purple';
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'comparisonWithLargestEnd':
+          timer = new Timer(() => {
+            const [_, index, largest] = animations[i];
+            const barStyle = arrayBars[index].style;
+            const largestBarStyle = arrayBars[largest].style;
+            barStyle.backgroundColor = 'orange';
+            largestBarStyle.backgroundColor = 'purple';
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'largestChanged':
+          timer = new Timer(() => {
+            const [_, index, prevLargest] = animations[i];
+            const barStyle = arrayBars[index].style;
+            const prevBarStyle = arrayBars[index].style;
+            barStyle.backgroundColor = 'purple';
+            prevBarStyle.backgroundColor = 'orange';
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'rootChangingStart':
+          timer = new Timer(() => {
+            const [_, largest, root] = animations[i];
+            const barStyle = arrayBars[largest].style;
+            const rootStyle = arrayBars[root].style;
+            barStyle.backgroundColor = 'purple';
+            rootStyle.backgroundColor = 'orange';
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'newRootValue':
+          timer = new Timer(() => {
+            const [_, index, value] = animations[i];
+            const barStyle = arrayBars[index].style;
+            barStyle.height = `${(value / largestValue) * 100}%`;
+            barStyle.color = 'green';
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'newChildValue':
+          timer = new Timer(() => {
+            const [_, index, value] = animations[i];
+            const barStyle = arrayBars[index].style;
+            barStyle.height = `${(value / largestValue) * 100}%`;
+            barStyle.backgroundColor = 'green';
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'rootChangingEnd':
+          timer = new Timer(() => {
+            const [_, firstIndex, secondIndex] = animations[i];
+            arrayBars[firstIndex].style.backgroundColor = 'green';
+            arrayBars[secondIndex].style.backgroundColor = 'green';
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'rootPutToTheEndStart':
+          timer = new Timer(() => {
+            const [_, endIndex, rootIndex] = animations[i];
+            arrayBars[endIndex].style.backgroundColor = 'orange';
+            arrayBars[rootIndex].style.backgroundColor = 'orange';
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'newRoot2':
+          timer = new Timer(() => {
+            const [_, rootIndex, value] = animations[i];
+            arrayBars[rootIndex].style.height = `${(value / largestValue) * 100}%`;
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'newChild2':
+          timer = new Timer(() => {
+            const [_, childIndex, value] = animations[i];
+            arrayBars[childIndex].style.height = `${(value / largestValue) * 100}%`;
+          }, i * 100);
+          firstTimers.push(timer);
+          break;
+        case 'rootPutToTheEndEnd':
+          timer = new Timer(() => {
+            const [_, endIndex, rootIndex] = animations[i];
+            arrayBars[endIndex].style.backgroundColor = 'green';
+            arrayBars[endIndex].style.backgroundColor = 'green';
+          }, i * 100);
           firstTimers.push(timer);
           break;
       }
