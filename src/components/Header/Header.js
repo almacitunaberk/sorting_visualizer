@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import './Header.css';
 import { ImStatsBars } from 'react-icons/im';
 import { HiMenu } from 'react-icons/hi';
 import { toggle } from '../../redux/slices/toggleDashboard';
-import { setArraySize } from '../../redux/slices/arraySlice';
+import { setArraySize, toggleIsGenerateNew } from '../../redux/slices/arraySlice';
 
 const Header = ({ handleArrayGenerate, handleStart, handleStopResume, wait }) => {
   const dispatch = useDispatch();
@@ -26,6 +26,7 @@ const Header = ({ handleArrayGenerate, handleStart, handleStopResume, wait }) =>
         onSubmit={(e) => {
           e.preventDefault();
           dispatch(setArraySize(inputRef.current.value));
+          dispatch(toggleIsGenerateNew());
         }}
         className="bar__selection"
       >
@@ -40,14 +41,14 @@ const Header = ({ handleArrayGenerate, handleStart, handleStopResume, wait }) =>
       <button className="header__button" onClick={handleStart}>
         Start
       </button>
-      <button className="header__button" onClick={handleStopResume}>
+      <button
+        className="header__button"
+        onClick={() => {
+          handleStopResume();
+        }}
+      >
         {wait ? 'Resume' : 'Stop'}
       </button>
-      {/*
-      <button className={`header__button ${!wait && 'header__button--disabled'}`} onClick={handleResume}>
-        Resume
-      </button>
-      */}
     </div>
   );
 };

@@ -8,7 +8,8 @@ import { GiClick } from 'react-icons/gi';
 import { BiDownload } from 'react-icons/bi';
 import { BiGitPullRequest } from 'react-icons/bi';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeAlgo } from '../../redux/slices/selectedAlgo';
+import { changeAlgo, setIsStop } from '../../redux/slices/selectedAlgo';
+import { toggleIsGenerateNew } from '../../redux/slices/arraySlice';
 
 const Dashboard = () => {
   const _toggle = useSelector((state) => state.toggleDashboard);
@@ -17,29 +18,49 @@ const Dashboard = () => {
 
   const [selectedAlgo, setSelectedAlgo] = useState('merge');
 
-  const mergeSelected = (e) => {
-    setSelectedAlgo('merge');
-    dispatch(changeAlgo('merge'));
+  const mergeSelected = () => {
+    if (selectedAlgo !== 'merge') {
+      setSelectedAlgo('merge');
+      dispatch(changeAlgo('merge'));
+      dispatch(toggleIsGenerateNew());
+    }
   };
   const bubbleSelected = () => {
-    setSelectedAlgo('bubble');
-    dispatch(changeAlgo('bubble'));
+    if (selectedAlgo !== 'bubble') {
+      setSelectedAlgo('bubble');
+      dispatch(changeAlgo('bubble'));
+      dispatch(toggleIsGenerateNew());
+    }
   };
   const insertionSelected = () => {
-    setSelectedAlgo('insertion');
-    dispatch(changeAlgo('insertion'));
+    if (selectedAlgo !== 'insertion') {
+      setSelectedAlgo('insertion');
+      dispatch(changeAlgo('insertion'));
+      dispatch(toggleIsGenerateNew());
+    }
   };
   const selectionSelected = () => {
-    setSelectedAlgo('selection');
-    dispatch(changeAlgo('selection'));
+    if (selectedAlgo !== 'selection') {
+      setSelectedAlgo('selection');
+      dispatch(changeAlgo('selection'));
+      dispatch(toggleIsGenerateNew());
+    }
   };
+
   const quickSortSelected = () => {
-    setSelectedAlgo('quick');
-    dispatch(changeAlgo('quick'));
+    if (selectedAlgo !== 'quick') {
+      setSelectedAlgo('quick');
+      dispatch(changeAlgo('quick'));
+      dispatch(toggleIsGenerateNew());
+    }
   };
+
   const heapSortSelected = () => {
-    setSelectedAlgo('heap');
-    dispatch(changeAlgo('heap'));
+    if (selectedAlgo !== 'heap') {
+      setSelectedAlgo('heap');
+      dispatch(changeAlgo('heap'));
+      dispatch(toggleIsGenerateNew());
+    }
   };
 
   return (

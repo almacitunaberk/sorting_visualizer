@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux';
 import { setToggleFalse, setToggleTrue } from './redux/slices/toggleDashboard';
 
 const App = () => {
-  
   const dispatch = useDispatch();
 
   const dashboardBehavior = () => {
@@ -16,6 +15,8 @@ const App = () => {
       dispatch(setToggleTrue());
     } else if (window.innerWidth < 1200) {
       dispatch(setToggleTrue());
+    } else {
+      dispatch(setToggleFalse());
     }
   };
 

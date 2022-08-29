@@ -14,9 +14,12 @@ export default class Timer {
       if (timerId) {
         return;
       }
-
       start = Date.now();
       timerId = window.setTimeout(callback, remaining);
+    };
+
+    this.destroy = function () {
+      window.clearTimeout(timerId);
     };
 
     this.resume();

@@ -6,6 +6,7 @@ const arraySlice = createSlice({
     arraySize: 100,
     array: [],
     largestValue: 10,
+    isGenerateNew: false,
   },
   reducers: {
     setArraySize: (state, action) => {
@@ -17,10 +18,15 @@ const arraySlice = createSlice({
     setLargestValue: (state, action) => {
       state.largestValue = action.payload;
     },
-    generateArray: (state, action) => {},
+    setIsGenerateNew: (state, action) => {
+      state.isGenerateNew = action.payload;
+    },
+    toggleIsGenerateNew: (state) => {
+      state.isGenerateNew = !state.isGenerateNew;
+    },
   },
 });
 
-export const { setArraySize, setArray, setLargestValue } = arraySlice.actions;
+export const { setArraySize, setArray, setLargestValue, setIsGenerateNew, toggleIsGenerateNew } = arraySlice.actions;
 
 export default arraySlice.reducer;

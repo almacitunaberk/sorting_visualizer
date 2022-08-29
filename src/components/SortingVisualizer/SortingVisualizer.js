@@ -15,20 +15,14 @@ import './SortingVisualizer.css';
 import Timer from '../../utils/Timer';
 
 const SortingVisualizer = () => {
-  const selectedAlgo = useSelector((state) => state.selectedAlgo);
+  const { algo, isStop } = useSelector((state) => state.selectedAlgo);
   const arrayState = useSelector((state) => state.arrayState);
-  const { arraySize, largestValue, array } = arrayState;
-  const [wait, setWait] = useState(false);
-  // const _arraySize = window.localStorage.getItem('arraySize') || 300;
-  //const [array, setArray] = useState([]);
-  //const [arraySize, setArraySize] = useState(_arraySize);
-  //const [largestValue, setLargestValue] = useState(10);
-  let sortingStarted = useRef(false);
-
+  const { arraySize, largestValue, array, isGenerateNew } = arrayState;
   const dispatch = useDispatch();
-
   let firstTimers = useRef([]);
   let secondTimers = useRef([]);
+  const [wait, setWait] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
 
   const generateRandomArray = () => {
     const newArray = [];
@@ -49,6 +43,7 @@ const SortingVisualizer = () => {
   };
 
   const resetArray = () => {
+    setIsStarted(false);
     const [newArray, newLargestValue] = generateRandomArray();
     dispatch(setArray(newArray));
     dispatch(setLargestValue(newLargestValue));
@@ -58,13 +53,26 @@ const SortingVisualizer = () => {
     resetArray();
   }, [arraySize]);
 
+  useEffect(() => {
+    resetArray();
+    firstTimers.current.forEach((timer) => timer.destroy());
+    secondTimers.current.forEach((timer) => timer.destroy());
+    firstTimers.current = [];
+    secondTimers.current = [];
+    setIsStarted(false);
+    setWait(false);
+  }, [isGenerateNew]);
+
   const generateRandomNubmer = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
   const handleStart = () => {
-    sortingStarted = true;
-    switch (selectedAlgo.algo) {
+    if (isStarted) {
+      return;
+    }
+    setIsStarted(true);
+    switch (algo) {
       case 'merge': {
         handleMergeSort();
         break;
@@ -394,6 +402,9 @@ const SortingVisualizer = () => {
   };
 
   const handleStopResume = () => {
+    if (!isStarted) {
+      return;
+    }
     if (!wait) {
       firstTimers.current.forEach((timer) => {
         timer.pause();
@@ -410,12 +421,6 @@ const SortingVisualizer = () => {
       });
     }
     setWait((prev) => !prev);
-  };
-
-  const handleResume = () => {
-    if (wait) {
-      return;
-    }
   };
 
   return (
